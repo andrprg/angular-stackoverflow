@@ -7,7 +7,10 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "version:patch": "standard-version -- --release-as patch",
+    "version:minor": "standard-version -- --release-as minor",
+    "version:major": "standard-version -- --release-as major"
   },
   "private": true,
   "dependencies": {
