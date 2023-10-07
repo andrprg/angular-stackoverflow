@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -13,12 +13,18 @@ export class ApiCommonService {
 
   /**
    * @param url 
-   * @param [header] 
+   * @param params 
    * @returns get 
    */
-  public get<T>(url: string, header?: object): Observable<T> {
-    header = header ?? this._header;
-    return this._http.get<T>(url, header);
+  public get<T>(url: string, params?: Object): Observable<T> {
+    let requestOptions;
+    if (params) {
+      requestOptions = { headers: this._header, params: this.getHttpParamsFromObject(params)};
+    } else {
+      requestOptions = { headers: this._header};
+    }
+
+    return this._http.get<T>(url, requestOptions);
   }
 
   /**
@@ -55,5 +61,11 @@ export class ApiCommonService {
       body: requestBody,
     };
     return this._http.request<T>('delete', url, options);
+  }
+
+  private getHttpParamsFromObject(obj: Object): HttpParams {
+    return Object.entries(obj)
+      .filter(([key, value]) => !!value) 
+      .reduce((params, [key, value]) => params.set(key, value as string), new HttpParams());
   }
 }
