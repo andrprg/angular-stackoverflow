@@ -1,10 +1,4 @@
-export interface IQuestionBody {
-  has_more: boolean;
-  items: IQuestion[];
-  quota_max: number;
-  quota_remaining: number;
-
-}
+import { Owner } from "./Owner";
 
 export interface IQuestion {
   tags: string[]
@@ -21,12 +15,3 @@ export interface IQuestion {
   title: string
 }
 
-export interface Owner {
-  account_id: number
-  reputation: number
-  user_id: number
-  user_type: string
-  profile_image: string
-  display_name: string
-  link: string
-}
