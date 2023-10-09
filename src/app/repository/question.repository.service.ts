@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ApiCommonService } from '../data/common/api-common.service';
 import { BehaviorSubject, Observable, map, tap } from 'rxjs';
-import { IQuestion, IQuestionBody } from '../domain/question';
+import { IQuestion } from '../domain/question';
+import { IResponse } from "../domain/response";
 import { RequestQuestion } from '../domain/request';
 
 
@@ -32,10 +33,10 @@ export class QuestionRepositoryService {
     next && this.subjectHasMore.getValue() ? ++params.page : params.page = 1;
     params.pagesize = this.pageSize;
     console.log('next:', next,  this.subjectHasMore.getValue(), params.page);
-    return this.apiCommonService.get<IQuestionBody>('questions', params)
+    return this.apiCommonService.get<IResponse>('questions', params)
     .pipe(
-      tap((data: IQuestionBody) => this.subjectHasMore.next(data.has_more)),
-      map((data: IQuestionBody) => data.items),
+      tap((data: IResponse) => this.subjectHasMore.next(data.has_more)),
+      map((data: IResponse) => data.items),
     );
     
   }
