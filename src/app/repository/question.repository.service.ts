@@ -33,10 +33,10 @@ export class QuestionRepositoryService {
     next && this.subjectHasMore.getValue() ? ++params.page : params.page = 1;
     params.pagesize = this.pageSize;
     console.log('next:', next,  this.subjectHasMore.getValue(), params.page);
-    return this.apiCommonService.get<IResponse>('questions', params)
+    return this.apiCommonService.get<IResponse<IQuestion>>('questions', params)
     .pipe(
-      tap((data: IResponse) => this.subjectHasMore.next(data.has_more)),
-      map((data: IResponse) => data.items),
+      tap((data: IResponse<IQuestion>) => this.subjectHasMore.next(data.has_more)),
+      map((data: IResponse<IQuestion>) => data.items),
     );
     
   }

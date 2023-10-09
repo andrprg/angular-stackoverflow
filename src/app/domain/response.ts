@@ -1,9 +1,10 @@
+import { IAnswer } from "./answer";
 import { IQuestion } from "./question";
 
 
-export interface IResponse {
+export interface IResponse<T> {
   has_more: boolean;
-  items: IQuestion[];
+  items: T[];
   quota_max: number;
   quota_remaining: number;
 
