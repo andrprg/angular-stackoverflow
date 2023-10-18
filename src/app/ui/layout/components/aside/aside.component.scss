@@ -1,0 +1,7 @@
+@import 'src/stylesheets/index';
+
+:host {
+    grid-area: aside;
+    background-color: var(--color-BDBDBD);
+    height: 100%;
+}

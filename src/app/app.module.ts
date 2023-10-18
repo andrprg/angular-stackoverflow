@@ -9,19 +9,29 @@ import { MainComponent } from './ui/layout/components/main/main.component';
 import { FooterComponent } from './ui/layout/components/footer/footer.component';
 import { HeaderInterceptor } from './data/interceptors/header.interceptor';
 import { ApiPrefixInterceptor } from './data/interceptors/api-prefix.interceptor';
+import { MessagesComponent } from './presentation/common/messages/messages.component';
+import { MatIconModule } from '@angular/material/icon';
+import { LoadingComponent } from './presentation/common/loading/loading.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AsideComponent } from './ui/layout/components/aside/aside.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     MainComponent,
-    FooterComponent
+    FooterComponent,
+    MessagesComponent,
+    LoadingComponent,
+    AsideComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
-  ],
+    HttpClientModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+  ],  
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
