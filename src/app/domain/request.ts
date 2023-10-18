@@ -4,9 +4,7 @@
 
 export type SortType = 'activity' | 'creation' | 'votes' | 'hot' | 'week' | 'month';;
 
-export class RequestQuestion {
-    private static instance: RequestQuestion;
-
+class Request {
     page: number = 1;
     pagesize: number = 20;
     order: 'desc' | 'asc' = 'desc';
@@ -15,12 +13,34 @@ export class RequestQuestion {
     fromdate: number | undefined;
     todate: number | undefined;
 
-    static getInstance() {
-        if (!RequestQuestion.instance) {
-            RequestQuestion.instance = new RequestQuestion();
-        }
-        return RequestQuestion.instance;
-    }
-
-    private constructor() { }
+    constructor() { }
 }
+
+export class RequestQuestion extends Request {
+    // Текстовый параметр произвольной формы
+    q: string = '';
+
+    // текст, который должен содержаться в текстах возвращенных вопросов.
+    body: string = '';
+    
+    // список тегов, разделенных точкой с запятой.
+    tagged: string = '';
+    constructor() {
+        super();
+    }
+}
+
+
+export class RequestAnswer extends Request {
+    constructor() {
+        super();
+    }
+}
+
+
+export class RequestTag extends Request {
+    constructor() {
+        super();
+    }
+}
+
