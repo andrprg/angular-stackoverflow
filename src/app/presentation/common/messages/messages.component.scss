@@ -1,5 +1,5 @@
-@import 'src/theme/colors';
-@import "src/theme/font_mixins";
+@import 'src/stylesheets/colors';
+@import "src/stylesheets/font_mixins";
 
 .container {
   @include font-Ubuntu-fz14-fw400;

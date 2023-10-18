@@ -1,5 +1,6 @@
 @import 'src/stylesheets/index';
 
 :host {
-    flex-grow: 1;
+    grid-area: main;
+    height: 100%;
 }
