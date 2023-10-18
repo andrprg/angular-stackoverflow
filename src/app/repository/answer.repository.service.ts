@@ -1,26 +1,21 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { ApiCommonService } from '../data/common/api-common.service';
-import { RequestQuestion } from '../domain/request';
+import { RequestAnswer, RequestQuestion } from '../domain/request';
 import { IResponse } from '../domain/response';
 import { IAnswer } from '../domain/answer';
+import { PaginationService } from './pagination.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AnswerRepositoryService {
-
-    /**
-   * Можно ли еще загрузить ответы
-   */
-    private subjectHasMore = new BehaviorSubject<boolean>(true);
-    hasMore$ = this.subjectHasMore.asObservable();
-  
-    pageSize: number = 20;
+export class AnswerRepositoryService extends PaginationService {
   
     constructor(
       private apiCommonService: ApiCommonService
-    ) { }
+    ) { 
+      super();
+    }
   
     /**
      * Получаем список ответов 
@@ -28,15 +23,31 @@ export class AnswerRepositoryService {
      * @param next true - выбирать следующую страницу
      * @returns массив ответов
      */
-    getList(params: RequestQuestion, next: boolean = false): Observable<IAnswer[]> {
-      next && this.subjectHasMore.getValue() ? ++params.page : params.page = 1;
-      params.pagesize = this.pageSize;
-      console.log('next:', next,  this.subjectHasMore.getValue(), params.page);
-      return this.apiCommonService.get<IResponse<IAnswer>>('questions', params)
+    private getList(): Observable<IAnswer[]> {
+      console.log('answer next:',  this.paramsQuery.page);
+      return this.apiCommonService.get<IResponse<IAnswer>>('questions', this.paramsQuery.page)
       .pipe(
         tap((data: IResponse<IAnswer>) => this.subjectHasMore.next(data.has_more)),
         map((data: IResponse<IAnswer>) => data.items),
-      );
-      
+      );      
     }
+
+  /**  
+   * Первоначальная загрузка данных
+   * @params параметры запроса
+   * @returns массив вопросов
+   */
+  loadInitialData(params?: RequestQuestion): Observable<IAnswer[]> {
+    this.paramsQuery = params ? params : new RequestQuestion();
+    return this.getList();
+  }
+
+  /**
+   * Загрузка следующей страницы
+   * @returns массив вопросов
+   */
+  nextPage(): Observable<IAnswer[]> {
+    this.subjectHasMore.getValue() && ++this.paramsQuery.page;
+    return this.getList();
+  }
 }
