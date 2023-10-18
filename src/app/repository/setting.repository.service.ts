@@ -7,7 +7,7 @@ import { LocalService } from '../data/common/local.service';
 @Injectable({
   providedIn: 'root'
 })
-export class SettingsService {
+export class SettingRepositoryService {
 
   /**
    * Наименование локальной базы
@@ -40,5 +40,13 @@ export class SettingsService {
     }
     this.localService.set<ISettings>(this.NAME_LOCAL_BASE, this.defaultSetting);
     return { ...this.defaultSetting };
+  }
+
+  /**
+   * Сохранякм настройки приложения
+   * @param config 
+   */
+  set(config: ISettings) {
+    this.localService.set<ISettings>(this.NAME_LOCAL_BASE, config);
   }
 }
