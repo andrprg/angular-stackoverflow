@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map, tap } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, catchError, map, tap } from 'rxjs';
 import { ApiCommonService } from '../data/common/api-common.service';
 import { RequestAnswer, RequestQuestion } from '../domain/request';
 import { IResponse } from '../domain/response';
 import { IAnswer } from '../domain/answer';
 import { PaginationService } from './pagination.service';
+import { MessagesService } from '../data/common/messages.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ import { PaginationService } from './pagination.service';
 export class AnswerRepositoryService extends PaginationService {
   
     constructor(
-      private apiCommonService: ApiCommonService
+      private apiCommonService: ApiCommonService,
+      private messageService: MessagesService,
     ) { 
       super();
     }
@@ -25,7 +27,7 @@ export class AnswerRepositoryService extends PaginationService {
      */
     private getList(): Observable<IAnswer[]> {
       console.log('answer next:',  this.paramsQuery.page);
-      return this.apiCommonService.get<IResponse<IAnswer>>('questions', this.paramsQuery.page)
+      return this.apiCommonService.get<IResponse<IAnswer>>('answers', this.paramsQuery)
       .pipe(
         tap((data: IResponse<IAnswer>) => this.subjectHasMore.next(data.has_more)),
         map((data: IResponse<IAnswer>) => data.items),
@@ -37,9 +39,14 @@ export class AnswerRepositoryService extends PaginationService {
    * @params параметры запроса
    * @returns массив вопросов
    */
-  loadInitialData(params?: RequestQuestion): Observable<IAnswer[]> {
-    this.paramsQuery = params ? params : new RequestQuestion();
-    return this.getList();
+  loadInitialData(params?: RequestAnswer): Observable<IAnswer[]> {
+    this.paramsQuery = params ? params : new RequestAnswer();
+    return this.getList().pipe(
+      catchError(error => {
+        this.messageService.showErrors('Ошибка при загрузке данных');
+        return EMPTY;
+      })
+    );
   }
 
   /**
