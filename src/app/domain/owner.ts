@@ -1,5 +1,5 @@
 
-export interface Owner {
+export interface IOwner {
   account_id: number;
   reputation: number;
   user_id: number;
