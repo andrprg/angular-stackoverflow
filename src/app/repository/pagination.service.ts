@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { RequestQuestion } from '../domain/request';
+import { RequestBase } from '../domain/request';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +16,9 @@ export class PaginationService {
     /**
      * Параметры запроса
      */
-    paramsQuery: RequestQuestion;
+    paramsQuery: RequestBase;
 
   constructor() {
-    this.paramsQuery = new RequestQuestion();
+    this.paramsQuery = new RequestBase();
    }
 }

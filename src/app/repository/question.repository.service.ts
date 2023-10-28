@@ -28,7 +28,6 @@ export class QuestionRepositoryService extends PaginationService {
    * @returns массив вопросов
    */
   private getList(): Observable<IQuestion[]> {
-    console.log('question next:', this.paramsQuery.page);
     return this.apiCommonService.get<IResponse<IQuestion>>('questions', this.paramsQuery)
       .pipe(
         tap((data: IResponse<IQuestion>) => this.subjectHasMore.next(data.has_more)),
@@ -42,11 +41,12 @@ export class QuestionRepositoryService extends PaginationService {
    * @params параметры запроса
    * @returns массив вопросов
    */
-  loadInitialData(params?: RequestQuestion): Observable<IQuestion[]> {
-    this.paramsQuery = params ? params : new RequestQuestion();
+  search(params?: RequestQuestion): Observable<IQuestion[]> {
+    this.paramsQuery = params ? {...this.paramsQuery, ...params} : new RequestQuestion();
+    console.log('params', params);
+    console.log('paramsQuesy', this.paramsQuery);
     return this.getList().pipe(
       catchError(error => {
-        console.log(error.message);
         this.messageService.showErrors('Ошибка при загрузке данных');
         return EMPTY;
       })
@@ -61,7 +61,6 @@ export class QuestionRepositoryService extends PaginationService {
     this.subjectHasMore.getValue() && ++this.paramsQuery.page;
     return this.getList().pipe(
       catchError(error => {
-        console.log(error.message);
         this.messageService.showErrors('Ошибка при загрузке данных');
         return EMPTY;
       })
